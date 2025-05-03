@@ -18,11 +18,11 @@ pages, and returns the generated PDF. Each SVG is sized precisely and optionally
 1. **Clone the Repository**
 
 ```bash
-git clone https://github.com/your-repo/svg-pdf-api.git
-cd svg-pdf-api
+git clone https://github.com/kha333n/svg_to_pdf_api.git
+cd svg_to_pdf_api
 ```
 
-2. **(Optional) Create a Virtual Environment**
+2. **Create a Virtual Environment**
 
 ```bash
 python3 -m venv venv
