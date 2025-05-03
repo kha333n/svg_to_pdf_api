@@ -15,6 +15,9 @@ pages, and returns the generated PDF. Each SVG is sized precisely and optionally
 
 ## 🛠️ Setup Instructions
 
+### Prerequisites
+- Python 3.12
+
 1. **Clone the Repository**
 
 ```bash
@@ -26,7 +29,11 @@ cd svg_to_pdf_api
 
 ```bash
 python3 -m venv venv
+# Activate the virtual environment on Linux/Mac
 source venv/bin/activate
+
+# Activate the virtual environment on Windows
+venv\Scripts\activate
 ```
 
 3. **Install Dependencies**
@@ -38,7 +45,7 @@ pip install -r requirements.txt
 4. **Run the Server**
 
 ```bash
-uvicorn main:app --reload
+uvicorn main:app --reload --port 8081
 ```
 
 ---

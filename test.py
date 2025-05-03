@@ -2,7 +2,7 @@ from pathlib import Path
 
 import requests
 
-API_URL = "http://localhost:8000"
+API_URL = "http://127.0.0.1:8081"
 SESSION_ID = "test-session-123"
 SVG_DIR = Path("test-files-square")
 OUTPUT_PDF = Path("output_test_result.pdf")
