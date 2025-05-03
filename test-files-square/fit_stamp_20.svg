@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<svg baseProfile="full" height="20mm" version="1.1" viewBox="0 0 200 200" width="20mm"
+     xmlns="http://www.w3.org/2000/svg"
+>
+    <defs/>
+    <rect fill="white" height="200" stroke="black" stroke-width="2" width="200" x="0" y="0"/>
+    <rect fill="none" height="140" stroke="black" stroke-width="2" width="140" x="30" y="30"/>
+    <text alignment-baseline="middle" fill="black" font-family="Courier New" font-size="22" text-anchor="middle" x="50%"
+          y="55%">RECEIVED
+    </text>
+</svg>
