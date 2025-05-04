@@ -16,6 +16,7 @@ pages, and returns the generated PDF. Each SVG is sized precisely and optionally
 ## 🛠️ Setup Instructions
 
 ### Prerequisites
+
 - Python 3.12
 
 1. **Clone the Repository**
@@ -88,7 +89,19 @@ Generate a PDF from previously uploaded SVGs grouped by stamp size.
 
 ---
 
-### 3. `POST /reset-session/?session_id=<your-session>`
+### 3. `GET /generate-individual-pdf?session_id=<your-session>`
+
+Generate individual PDFs page for each SVG in the session.
+
+#### Query Params:
+
+- `session_id` (string, required)
+
+#### Returns:
+
+- PDF file as direct download.
+
+### 4. `POST /reset-session/?session_id=<your-session>`
 
 Remove all uploaded SVGs from the session (including outputs).
 

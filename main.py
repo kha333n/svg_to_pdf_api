@@ -13,9 +13,9 @@ app = FastAPI()
 
 # === CONFIGURABLE PARAMETERS ===
 # Default outer margin on all sides of A4 in mm
-PAGE_MARGIN_MM = 1.4
+PAGE_MARGIN_MM = 0
 # Margin between each SVG stamp cell (horizontal & vertical) in mm
-CELL_MARGIN_MM = 1
+CELL_MARGIN_MM = 0
 # Unit conversion
 MM_TO_PT = 2.83465
 
@@ -25,7 +25,6 @@ SESSION_DIR.mkdir(exist_ok=True)
 
 # Store session data in memory for simplicity (you can persist this in DB/cache)
 session_svgs = {}
-
 
 @app.post("/upload-svg/")
 def upload_svg(
@@ -49,7 +48,6 @@ def upload_svg(
         f.write(f"{width_mm},{height_mm}")
 
     return {"message": "SVG uploaded", "stamp_id": stamp_id}
-
 
 @app.post("/generate-pdf/")
 def generate_pdf(session_id: str):
@@ -113,6 +111,48 @@ def generate_pdf(session_id: str):
         return FileResponse(generated_pdfs[0], filename=generated_pdfs[0].name)
     return JSONResponse(status_code=500, content={"error": "PDF generation failed"})
 
+@app.post("/generate-individual-pdf/")
+def generate_individual_pdf(session_id: str):
+    session_path = SESSION_DIR / session_id
+    if not session_path.exists():
+        return JSONResponse(status_code=404, content={"error": "Session not found"})
+
+    svg_files = sorted([f for f in session_path.glob("*.svg")])
+    if not svg_files:
+        return JSONResponse(status_code=400, content={"error": "No SVGs to process"})
+
+    pdf_dir = session_path / "output_individual"
+    pdf_dir.mkdir(exist_ok=True)
+
+    # Assume all SVGs are same size as defined by their metadata
+    output_pdf = pdf_dir / "stamps_individual_pages.pdf"
+    c = None
+
+    for svg_file in svg_files:
+        meta_file = svg_file.with_suffix(".meta")
+        if not meta_file.exists():
+            continue
+        with open(meta_file) as f:
+            width_mm, height_mm = map(float, f.read().strip().split(","))
+
+        page_size = (width_mm * MM_TO_PT, height_mm * MM_TO_PT)
+
+        if c is None:
+            c = canvas.Canvas(str(output_pdf), pagesize=page_size)
+        else:
+            c.setPageSize(page_size)
+            c.showPage()
+
+        drawing = svg2rlg(str(svg_file))
+        drawing.width = width_mm * MM_TO_PT
+        drawing.height = height_mm * MM_TO_PT
+        renderPDF.draw(drawing, c, 0, 0)
+
+    if c:
+        c.save()
+        return FileResponse(output_pdf, filename=output_pdf.name)
+
+    return JSONResponse(status_code=500, content={"error": "PDF generation failed"})
 
 @app.post("/reset-session/")
 def reset_session(session_id: str):
